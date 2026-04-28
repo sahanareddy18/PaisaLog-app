@@ -8,10 +8,10 @@ const app = express();
 app.use(cors({ origin: "*" }));
 app.use(express.json());
 
-// Init DB
+// Initialize DB (creates table if not exists)
 initDatabase();
 
-// Test route
+// Health check
 app.get("/", (req, res) => {
   res.json({ message: "Backend working 🚀" });
 });
@@ -19,5 +19,15 @@ app.get("/", (req, res) => {
 // Routes
 app.use("/expenses", expensesRouter);
 
-// Export for Vercel
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({ error: "Route not found" });
+});
+
+// Error handler
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ error: "Internal Server Error" });
+});
+
 export default app;

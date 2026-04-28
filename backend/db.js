@@ -17,6 +17,7 @@ export async function initDatabase() {
       category VARCHAR(100),
       description TEXT,
       date DATE,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       idempotency_key VARCHAR(255) UNIQUE
     )
   `);
