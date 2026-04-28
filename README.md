@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Full-Stack Expense Tracker
 
 A production-focused expense tracker with a React frontend and Express backend, using MySQL for persistence and idempotency keys to safely handle retries.
@@ -131,3 +132,6 @@ For backend env vars:
 - Working backend URL
 - Complete README with decisions/trade-offs
 - Commit history screenshot
+=======
+# PaisaLog-app
+>>>>>>> 430b03440cb399795deb5f7e5e5cf237fc494c56
