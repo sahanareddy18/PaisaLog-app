@@ -128,9 +128,12 @@ router.get('/', async (req, res) => {
 
     res.status(200).json(formattedExpenses);
   } catch (error) {
-    console.error('Error fetching expenses:', error);
-    res.status(500).json({ error: 'Failed to fetch expenses' });
-  }
+  console.error("FULL ERROR:", error);
+  res.status(500).json({
+    error: error.message,
+    code: error.code,
+  });
+}
 });
 
 export default router;
