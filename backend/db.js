@@ -1,35 +1,25 @@
-import mysql from 'mysql2/promise';
+import mysql from "mysql2/promise";
 
 function getDbConfig() {
-  const hasDiscreteConfig =
-    process.env.MYSQL_HOST ||
-    process.env.MYSQL_USER ||
-    process.env.MYSQL_PASSWORD ||
-    process.env.MYSQL_DATABASE ||
-    process.env.MYSQL_PORT;
-
-  if (hasDiscreteConfig) {
+  // ✅ Production (Railway)
+  if (process.env.MYSQL_URL) {
     return {
-      host: process.env.MYSQL_HOST || 'localhost',
-      user: process.env.MYSQL_USER || 'root',
-      password: process.env.MYSQL_PASSWORD || '',
-      database: process.env.MYSQL_DATABASE || 'expense_tracker',
-      port: Number(process.env.MYSQL_PORT || 3306),
+      uri: process.env.MYSQL_URL,
+      ssl: {
+        rejectUnauthorized: false,
+      },
       waitForConnections: true,
       connectionLimit: 10,
       queueLimit: 0,
     };
   }
 
-  if (process.env.MYSQL_URL) {
-    return process.env.MYSQL_URL;
-  }
-
+  // ✅ Local
   return {
-    host: process.env.MYSQL_HOST || 'localhost',
-    user: process.env.MYSQL_USER || 'root',
-    password: process.env.MYSQL_PASSWORD || '',
-    database: process.env.MYSQL_DATABASE || 'expense_tracker',
+    host: process.env.MYSQL_HOST || "localhost",
+    user: process.env.MYSQL_USER || "root",
+    password: process.env.MYSQL_PASSWORD || "",
+    database: process.env.MYSQL_DATABASE || "expense_tracker",
     port: Number(process.env.MYSQL_PORT || 3306),
     waitForConnections: true,
     connectionLimit: 10,
@@ -40,7 +30,7 @@ function getDbConfig() {
 const pool = mysql.createPool(getDbConfig());
 
 export async function initDatabase() {
-  const createTableQuery = `
+  const query = `
     CREATE TABLE IF NOT EXISTS expenses (
       id INT AUTO_INCREMENT PRIMARY KEY,
       amount INT NOT NULL,
@@ -54,7 +44,7 @@ export async function initDatabase() {
     )
   `;
 
-  await pool.execute(createTableQuery);
+  await pool.execute(query);
 }
 
 export default pool;
