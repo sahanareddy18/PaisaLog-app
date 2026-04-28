@@ -8,26 +8,27 @@ const app = express();
 app.use(cors({ origin: "*" }));
 app.use(express.json());
 
-// Initialize DB (creates table if not exists)
-initDatabase();
+// Wait for DB before handling requests
+let dbReady = false;
 
-// Health check
+initDatabase().then(() => {
+  dbReady = true;
+  console.log("DB Ready ✅");
+});
+
+// Middleware to block requests until DB ready
+app.use((req, res, next) => {
+  if (!dbReady) {
+    return res.status(503).json({ error: "Server starting, try again" });
+  }
+  next();
+});
+
+// Routes
 app.get("/", (req, res) => {
   res.json({ message: "Backend working 🚀" });
 });
 
-// Routes
 app.use("/expenses", expensesRouter);
-
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({ error: "Route not found" });
-});
-
-// Error handler
-app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).json({ error: "Internal Server Error" });
-});
 
 export default app;
