@@ -2,11 +2,7 @@ import mysql from "mysql2/promise";
 
 const pool = mysql.createPool({
   uri: process.env.MYSQL_URL,
-  ssl: {
-    rejectUnauthorized: false,
-  },
-  waitForConnections: true,
-  connectionLimit: 10,
+  ssl: { rejectUnauthorized: false }
 });
 
 export async function initDatabase() {
@@ -17,7 +13,6 @@ export async function initDatabase() {
       category VARCHAR(100),
       description TEXT,
       date DATE,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       idempotency_key VARCHAR(255) UNIQUE
     )
   `);

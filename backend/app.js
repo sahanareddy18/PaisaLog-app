@@ -8,23 +8,8 @@ const app = express();
 app.use(cors({ origin: "*" }));
 app.use(express.json());
 
-// Wait for DB before handling requests
-let dbReady = false;
+await initDatabase();
 
-initDatabase().then(() => {
-  dbReady = true;
-  console.log("DB Ready ✅");
-});
-
-// Middleware to block requests until DB ready
-app.use((req, res, next) => {
-  if (!dbReady) {
-    return res.status(503).json({ error: "Server starting, try again" });
-  }
-  next();
-});
-
-// Routes
 app.get("/", (req, res) => {
   res.json({ message: "Backend working 🚀" });
 });
