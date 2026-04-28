@@ -5,16 +5,14 @@ const pool = mysql.createPool({
   ssl: {
     rejectUnauthorized: false,
   },
-  waitForConnections: true,
-  connectionLimit: 10,
 });
 
 export async function initDatabase() {
   try {
-    await pool.execute("SELECT 1"); // test connection
-    console.log("✅ DB Connected");
+    await pool.execute("SELECT 1");
+    console.log("✅ DB Connected Successfully");
   } catch (err) {
-    console.error("❌ DB Connection Error:", err);
+    console.error("❌ DB ERROR:", err.message);
   }
 }
 

@@ -15,5 +15,5 @@ app.get("/", (req, res) => {
 });
 
 app.use("/expenses", expensesRouter);
-
+console.log("ENV CHECK:", process.env.MYSQL_URL);
 export default app;
