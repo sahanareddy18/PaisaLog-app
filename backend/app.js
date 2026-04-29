@@ -8,12 +8,17 @@ const app = express();
 app.use(cors({ origin: "*" }));
 app.use(express.json());
 
-await initDatabase();
+// Initialize DB without blocking (handle gracefully)
+initDatabase().then(() => {
+  console.log("✅ Database initialized");
+}).catch(err => {
+  console.log("⚠️ DB init note:", err.message);
+});
 
 app.get("/", (req, res) => {
   res.json({ message: "Backend working 🚀" });
 });
 
 app.use("/expenses", expensesRouter);
-console.log("ENV CHECK:", process.env.MYSQL_URL);
+
 export default app;

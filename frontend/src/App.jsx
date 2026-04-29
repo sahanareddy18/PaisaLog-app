@@ -20,17 +20,22 @@ function App() {
     setLoading(true);
     setError('');
 
+    console.log('Fetching from:', API_URL);
+
     try {
       const params = new URLSearchParams();
       if (filter) params.append('category', filter);
       params.append('sort', sort);
 
       const res = await fetch(`${API_URL}/expenses?${params}`);
+      console.log('Response status:', res.status);
+      
       if (!res.ok) throw new Error('Failed to fetch expenses');
 
       const data = await res.json();
       setExpenses(data);
     } catch (err) {
+      console.error('Fetch error:', err);
       setError(err.message || 'Failed to fetch expenses');
       setShowToast(true);
     } finally {
