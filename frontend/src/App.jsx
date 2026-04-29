@@ -4,7 +4,7 @@ import DashboardPage from './pages/DashboardPage';
 import AddExpensePage from './pages/AddExpensePage';
 import InsightsPage from './pages/InsightsPage';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_URL = import.meta.env.VITE_API_URL || 'https://paisa-log-app-gnb4.vercel.app';
 
 function App() {
   const [expenses, setExpenses] = useState([]);
