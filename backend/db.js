@@ -1,15 +1,31 @@
+import "dotenv/config";
 import mysql from "mysql2/promise";
 
-const pool = mysql.createPool(process.env.MYSQL_URL);
+let pool;
 
-export async function initDatabase() {
-  try {
-    const connection = await pool.getConnection();
-    console.log("✅ DB Connected Successfully");
-    connection.release();
-  } catch (err) {
-    console.error("❌ DB CONNECTION FAILED:", err.message);
+function getPool() {
+  if (!process.env.MYSQL_URL) {
+    throw new Error("MYSQL_URL environment variable is required");
   }
+
+  if (!pool) {
+    pool = mysql.createPool(process.env.MYSQL_URL);
+  }
+
+  return pool;
 }
 
-export default pool;
+export async function initDatabase() {
+  const connection = await getPool().getConnection();
+  console.log("DB connected successfully");
+  connection.release();
+}
+
+export default {
+  execute(...args) {
+    return getPool().execute(...args);
+  },
+  getConnection(...args) {
+    return getPool().getConnection(...args);
+  },
+};
