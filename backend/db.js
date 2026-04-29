@@ -9,7 +9,12 @@ function getPool() {
   }
 
   if (!pool) {
-    pool = mysql.createPool(process.env.MYSQL_URL);
+    pool = mysql.createPool({
+      uri: process.env.MYSQL_URL,
+      waitForConnections: true,
+      connectionLimit: 5,
+      connectTimeout: 5000,
+    });
   }
 
   return pool;
@@ -24,6 +29,9 @@ export async function initDatabase() {
 export default {
   execute(...args) {
     return getPool().execute(...args);
+  },
+  query(...args) {
+    return getPool().query(...args);
   },
   getConnection(...args) {
     return getPool().getConnection(...args);
